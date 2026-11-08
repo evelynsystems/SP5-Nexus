@@ -1,89 +1,140 @@
-# SP5 Nexus
+<div align="center">
 
-Linux desktop launcher for the experimental AnyPS5 engine. **Powered by AnyPS5**.
+![SP5 Nexus banner](docs/assets/nexus-banner.svg)
 
-**Development status:** Experimental. Commercial PS5 game compatibility is not guaranteed. This source package does not include the AnyPS5 engine, firmware, decrypted game files, or game discs. NVIDIA and AMD GPU detection is supported, but compatibility requires testing on actual hardware.
+# SP5 NEXUS
 
-The original AnyPS5 project is maintained separately: https://github.com/boykopovar/AnyPS5 . SP5 Nexus is not an official Sony product.
+### Your Games. Your System.
 
-# SP5 Nexus desktop edition
+**A console inspired gaming frontend for Linux, built with a native Rust core and an embedded Qt desktop interface.**
 
-Powered by AnyPS5. This edition retains the exact HTML, CSS and JavaScript dashboard from the approved visual build, now inside a native Ubuntu Qt WebEngine window. **Firefox and Chrome are not opened.** The local service is launched only inside the desktop process and stops when the window closes.
+[![Linux](https://img.shields.io/badge/Platform-Linux-1693D1?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/evelynsystems/SP5-Nexus)
+[![Rust](https://img.shields.io/badge/Core-Rust-263445?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![Python](https://img.shields.io/badge/Controller-Python-3478A2?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Qt](https://img.shields.io/badge/Desktop-Qt%20WebEngine-28A879?style=for-the-badge&logo=qt&logoColor=white)](https://www.qt.io/)
+[![License](https://img.shields.io/badge/License-MIT-6556D8?style=for-the-badge)](LICENSE)
 
-## Ubuntu installation
+**[Explore the interface](#the-console-experience) · [Features](#features) · [Install on Ubuntu](#installation) · [Engine compatibility](#anyps5-and-compatibility)**
 
-Install the Ubuntu prerequisites:
+</div>
 
-```bash
-sudo apt update
-sudo apt install python3-venv python3-pip libnss3 libxkbcommon0 libdbus-1-3 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 libasound2t64
+---
+
+## The console experience
+
+![SP5 Nexus console interface running on Ubuntu](docs/assets/nexus-home.png)
+
+*Real application screenshot provided from an Ubuntu desktop. Interface shown is an active Nexus 3.0 development design; the repository's published source and available releases may differ.*
+
+Nexus brings your gaming library, engine controls, hardware diagnostics and launcher settings into one desktop application. The experience is designed around large game artwork, fast access to your library and a console style layout that stays useful on a mouse and keyboard.
+
+> **Independent software.** SP5 Nexus is developed by **Desert Rat Software**. It is not affiliated with Sony or PlayStation. AnyPS5 is an independent, experimental project. A functioning launcher does not guarantee that commercial PS5 titles will run.
+
+## Features
+
+<table>
+<tr><td width="50%" valign="top"><h3>🎮 Console inspired dashboard</h3><p>Game focused navigation, featured title display, searchable library and a layout designed for full screen use.</p></td><td width="50%" valign="top"><h3>⚙️ AnyPS5 engine tools</h3><p>Engine detection, configuration, relinker inspection, conversion workflows and diagnostic feedback.</p></td></tr>
+<tr><td valign="top"><h3>🦀 Native Rust integration</h3><p>A Rust core connected to Python through PyO3, with an independently tested C API binding as a fallback in the locally verified 2.1 build.</p></td><td valign="top"><h3>🖥️ GPU and Vulkan diagnostics</h3><p>Hardware information for NVIDIA and AMD capable Linux systems, with Vulkan checks where the necessary utilities are installed.</p></td></tr>
+<tr><td valign="top"><h3>📚 Game management</h3><p>Import, browse, filter and organize local game entries with metadata and artwork support. Available features depend on the source version.</p></td><td valign="top"><h3>🧩 Optional Linux integrations</h3><p>Detection and configuration hooks for companion tools such as Gamescope and MangoHud, where installed.</p></td></tr>
+</table>
+
+### Inside Nexus
+
+| Area | Purpose |
+| :--- | :--- |
+| **Home and Library** | Browse your local game collection and select a title. |
+| **Engine Manager** | Inspect the AnyPS5 installation, relinker and available updates. |
+| **Conversion** | Configure supported conversion operations and review logs. |
+| **Diagnostics** | Inspect GPU information, Vulkan availability and engine readiness. |
+| **Settings** | Set paths, hardware preferences and launcher options. |
+
+## Built for Linux
+
+```text
+                    SP5 NEXUS DESKTOP
+                           │
+                 Qt WebEngine interface
+                           │
+                    Python controller
+                           │
+                  Native Rust core
+                    ╱           ╲
+             PyO3 binding     C API fallback
+                           │
+             Local library and engine tools
 ```
 
-Run:
+Nexus runs in an application window, rather than opening Firefox or Chrome as its user interface. The local application service is intended to stop when its window closes.
+
+**Hardware validation:** The Nexus 2.1 build was tested on Ubuntu with an NVIDIA GeForce RTX 3090. PyO3, the C API binding, Vulkan detection and Qt window startup passed local checks. These results do not establish support for every Linux distribution or every game.
+
+## Installation
+
+### Ubuntu source installation
+
+Clone the repository or download the source ZIP. From the project folder:
 
 ```bash
 chmod +x run.sh install_desktop_linux.sh
 ./run.sh
 ```
 
-The first run creates a local Python environment and installs Qt libraries through pip. A network connection is required on the first run. Later runs reuse the installed libraries.
+The launcher creates a Python environment and may install Qt dependencies on first use. See the scripts and [requirements.txt](requirements.txt) for the actual dependencies of the checked out version. Internet access is needed when dependencies are not already installed.
 
-Optional Ubuntu app menu launcher:
+Optional application menu integration:
 
 ```bash
 ./install_desktop_linux.sh
 ```
 
-Press F11 to enter or leave full screen. Close the window to stop the application service.
+For the traditional desktop interface, **F11** toggles full screen.
 
-## Important
+### Rust development builds
 
-This package includes the graphical launcher, engine installation manager and conversion hooks. **It does not contain an already compiled AnyPS5 engine or guarantee playable commercial PS5 titles.** Engine Manager still downloads and compiles upstream source on the user's machine. The game cover previews are decorative and not compatibility claims. Original engine: https://github.com/boykopovar/AnyPS5 .
+If your source version includes the native Rust directory and its scripts, consult its bundled build documentation and run the Rust verification script appropriate to that version. Python and PyO3 must be built for the same interpreter environment that runs the application.
 
-## AppImage
+Do not assume that GitHub's default branch contains every feature shown in a newer development screenshot.
 
-Use MarkForge to package the Linux app after installing its Python and Qt dependencies. AppImage construction and testing on the RTX 3090 have not yet been performed.
+### AppImage
 
+An AppImage must be compiled and verified before it is distributed as a release. **Do not treat the source archive as a ready to install AppImage.** Download only a release package explicitly published and verified by this repository's maintainers.
 
-## Repair build notes
-This source includes safer configuration loading, private API access checks, a temporary
-conversion output stage, cancellation for tracked subprocess groups, Git origin checks,
-real GPU defaults, hardware Vulkan detection and interface refresh fixes.
-Previously saved config is copied from ~/.config/anyps5-studio to ~/.config/sp5-nexus
-when the new location does not already contain the relevant file. The original
-files remain untouched. Back up both directories before installing.
+## AnyPS5 and compatibility
 
-Safe in-place AnyPS5 engine upgrades are intentionally disabled until separate build
-staging is implemented. The Install button reuses a validated existing engine.
-This ZIP contains launcher source only, not downloaded engine sources or build weights.
-Hardware testing, AppImage validation, and commercial game compatibility are unverified.
+Nexus is a frontend for the independently maintained [AnyPS5 project](https://github.com/boykopovar/AnyPS5). It does **not** ship the AnyPS5 engine, PS5 firmware, game discs, protected game files or decrypted assets.
 
+Actual game compatibility depends on the engine's capabilities, graphics hardware, Vulkan support, Linux drivers and the particular title. NVIDIA or AMD GPU detection does not establish that a game is playable.
 
-## AMD Radeon and NVIDIA graphics
+Engine Manager supports checks and configuration for an existing engine installation. Some engine features require a separate source checkout and compilation. Review the upstream documentation before running conversions.
 
-SP5 Nexus detects graphics hardware with `vulkaninfo --summary`. AMD Radeon GPUs work with a correctly installed Vulkan ICD, commonly RADV from Mesa. NVIDIA details are enhanced when `nvidia-smi` is present, but it is not required for AMD. Install `vulkan-tools` to enable the diagnostics. Hardware detection does not guarantee AnyPS5 game compatibility.
+## Security and responsible downloads
 
-For Ubuntu AMD systems, verify Vulkan with `vulkaninfo --summary`. GPU selection is automatic by default.
+Use the official repository for Nexus source and verify release checksums when provided. Impersonation repositories and suspicious emulator downloads have been reported. Avoid unofficial executable bundles and installers that ask you to disable security protections.
 
-## Optional gaming integrations
+The project does not include games or copyrighted console firmware. Use only software and content you are authorized to use.
 
-The Integrations screen performs a read only scan of Linux game controller devices, optical drives, and available tools. It lists the upstream projects and licenses as references. It does not download or bundle external projects, firmware, games or protected disc data.
+## Project status
 
-Optional programs:
+**Nexus 3.0 interface development is underway.** The screenshot above shows the proposed direction and should not be mistaken for proof that all planned features are available in the public source branch.
 
-* Gamescope (ValveSoftware/gamescope): install separately using your distribution's packages where available. Enable in Settings to wrap converted-game launches.
-* MangoHud (flightlessmango/MangoHud): install separately and opt in under Settings. It adds a performance overlay to converted-game launches.
-* SDL GameControllerDB (mdqinc/SDL_GameControllerDB): controller mappings are documented; support depends on the game/runtime and SDL and is not claimed to be automatically enabled.
-* pyudev (pyudev/pyudev): optional Linux hardware device monitoring library; the built in inspection works through sysfs and lsblk without this dependency.
-* IGDB API (twitchtv/igdb-api-python): cover lookup requires user credentials and approval. No automatic network cover downloads occur.
+Development priorities include polished game presentation, controller navigation, richer game management and engine settings, better verification and portable Linux packaging. Features are announced as completed only after implementation and testing.
 
-The optical drive scan is strictly read only. It does not mount, copy, decrypt or execute PS5 discs. Device detection does not establish game compatibility.
+## Credits
 
-**Hardware verification still required:** Sony controllers, AMD Radeon and NVIDIA GPU systems, optical drives, Gamescope, MangoHud, actual converted-game launches, and the final desktop window have not been tested on the user's PC in this build environment.
+**SP5 Nexus** is developed by **Desert Rat Software**.
 
+The [AnyPS5 engine](https://github.com/boykopovar/AnyPS5) is a separate upstream project; its authors retain credit and control of their work. Nexus is not an official Sony product.
 
-## Engine updates
+## License
 
-Open Engine Manager and select Check for Updates. This reads the official AnyPS5 GitHub HEAD commit without changing the local source. If a newer commit is found, Install Verified Engine Update clones and builds a separate copy in engine/nexus_updates, validates the compiled relinker and runtime libraries, and only then changes the configured relinker paths. Your previous engine source and build remain in place for manual rollback in Settings. Network access, free disk space, and compiler dependencies are required. Do not close the app during a build; use Stop Current Task to cancel. No engine update is installed without confirmation.
+See [LICENSE](LICENSE) for the project's MIT license. Third party dependencies and the separate AnyPS5 engine retain their own licenses.
 
-Optional Gamescope, MangoHud, GameMode and Vulkan utilities are managed by Ubuntu; SP5 Nexus reports their presence but does not run unattended system package updates or sudo commands. SP5 Nexus does not have a configured self-update feed, so the button does not claim to update its own GUI code.
+<div align="center">
+
+**SP5 NEXUS**
+
+*Your Games. Your System.*
+
+**Desert Rat Software**
+
+</div>
